@@ -1,0 +1,168 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "TestApplication API",
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/requests": {
+            "get": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Gets all requests",
+                "description": "Returns collection of all Applications pagninated 30 records in every page, also can be filtered by email, status\n     *      from-to (date) name ",
+                "operationId": "getRequests",
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Adds a new request",
+                "operationId": "storeRequest",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string, required, max:255"
+                                    },
+                                    "email": {
+                                        "type": "email, required"
+                                    },
+                                    "message": {
+                                        "type": "string, required"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "name": "Иван",
+                                    "email": "invan@mail.ru",
+                                    "message": "Тестовый текст"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    }
+                }
+            }
+        },
+        "/api/requests/{id}": {
+            "put": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Updates the request",
+                "description": "Returns updated request and if status Resolved sends email to the user",
+                "operationId": "updateRequest",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Requests id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "status": {
+                                        "type": "integer, in:1,2"
+                                    },
+                                    "comment": {
+                                        "type": "nullable, string, required_if:status,2"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "status": "2",
+                                    "comment": "Ответ на ваш запрос"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "422": {
+                        "description": "Validation Error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Requests"
+                ],
+                "summary": "Deletes request",
+                "description": "Deletes the request by id",
+                "operationId": "deletesRequest",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Requests id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        }
+    }
+}
